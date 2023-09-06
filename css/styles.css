@@ -11,6 +11,10 @@ body {
   background-size: contain;
 }
 
+html{
+  height: 100vh;
+}
+
 button {
   background-color: #fdfdfd;
   color: #aac1e3;
