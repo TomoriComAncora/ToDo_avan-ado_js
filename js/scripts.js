@@ -4,6 +4,9 @@ const todoList = document.querySelector("#todo-list");
 const editForm = document.querySelector("#edit-form");
 const editInput = document.querySelector("#edit-input");
 const btnCancel = document.querySelector("#cancel-edit-btn");
+const searchInput = document.querySelector("#search-input");
+const eraseBtn = document.querySelector("#eares-button");
+const filter = document.querySelector("#filter-select");
 
 let oldTodoTitle;
 // funções
@@ -53,6 +56,47 @@ const updateTodo = (text) => {
   });
 };
 
+const searchTodos = (search) => {
+  const todos = document.querySelectorAll(".todo");
+
+  todos.forEach((todo) => {
+    let todoTitle = todo.querySelector("h3").innerText.toLowerCase();
+
+    const normalizeSearch = search.toLowerCase();
+
+    todo.style.display = "flex";
+    if (!todoTitle.includes(normalizeSearch)) {
+      todo.style.display = "none";
+    }
+  });
+};
+
+const filterTodo = (filterValue) => {
+  const todos = document.querySelectorAll(".todo");
+
+  switch (filterValue) {
+    case "all":
+      todos.forEach((todo) => (todo.style.display = "flex"));
+      break;
+    case "done":
+      todos.forEach((todo) =>
+        todo.classList.contains("done")
+          ? (todo.style.display = "flex")
+          : (todo.style.display = "none")
+      );
+      break;
+    case "todo":
+      todos.forEach((todo) =>
+        todo.classList.contains("done")
+          ? (todo.style.display = "none")
+          : (todo.style.display = "flex")
+      );
+      break;
+
+    default:
+      break;
+  }
+};
 // eventos
 todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -100,4 +144,21 @@ editForm.addEventListener("submit", (e) => {
   }
 
   toggleEdit();
+});
+
+searchInput.addEventListener("keyup", (e) => {
+  const search = e.target.value;
+
+  searchTodos(search);
+});
+
+eraseBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  searchInput.value = "";
+  searchInput.dispatchEvent(new Event("keyup"));
+});
+
+filter.addEventListener("change", (e) => {
+  const filterValue = e.target.value;
+  filterTodo(filterValue);
 });
